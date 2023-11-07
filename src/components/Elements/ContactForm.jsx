@@ -1,13 +1,21 @@
 import styles from "../Style.module.css"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+import { getContacts } from "redux/selectors"
 import { addContact } from "redux/contactsSlice"
 
 export const ContactForm = () => {
     const dispatch = useDispatch()
+    const contacts  = useSelector(getContacts)
 
     const handleSubmit = (evt) => {
-        evt.preventDefault()
         const form = evt.target
+        evt.preventDefault()
+        for (const contact of contacts) {
+            if (contact.name === form.name.value) {
+                alert(`${contact.name} is already in contacts`)
+                return
+            }
+        }
         dispatch(addContact(form.name.value, form.number.value))
         form.reset()
     }
